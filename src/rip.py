@@ -49,6 +49,7 @@ MKV_MIN_LENGTH = config.getint('MAKEMKV', 'min_length')
 MKV_CACHE_SIZE = config.getint('MAKEMKV', 'cache_MB')
 MKV_TEMP_OUTPUT = config.get('MAKEMKV', 'temp_output')
 USE_HANDBRAKE = config.getboolean('MAKEMKV', 'handbrake')
+MYTHTV = config.getboolean('SYSTEM','mythtv')
 EJECT_DEV = config.get('SYSTEM','dvd_drive')
 
 #
@@ -77,6 +78,8 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
             print ("It took %s minutes to complete the ripping of %s"
                 %
                 (stopwatch.getTime(), movieTitle))
+            if MYTHTV:
+                proc = subprocess.Popen(['mythutil', '--scanvideos'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
             os.system('eject '+EJECT_DEV)
 
         else:
