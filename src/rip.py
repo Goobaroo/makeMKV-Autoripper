@@ -77,6 +77,8 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
         if PROWL:
             try:
                 p.add('makeMKV', 'Start Rip - '+movieTitle, movieTitle, 1, None, None)
+            except:
+                pass
 
         stopwatch = Timer()
 
@@ -94,6 +96,8 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
             if PROWL:
                 try:
                     p.add('makeMKV', 'Done Rip - '+movieTitle,"It took "+stopwatch.getTime()+"minutes to complete." , 1, None, None)
+                except:
+                    pass
             if MYTHTV:
                 proc = subprocess.Popen(['mythutil', '--scanvideos'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
             os.system('eject '+EJECT_DEV)
