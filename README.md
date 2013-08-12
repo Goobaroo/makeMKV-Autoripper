@@ -26,6 +26,12 @@ Handbrake - For converting and compressing
     * sudo add-apt-repository ppa:stebbins/handbrake-releases
     * sudo apt-get update && sudo apt-get install handbrake-cli
 
+Prowlpy - For ProwlApp.com Notificaions to your iOS Device
+* https://github.com/jacobb/prowlpy
+    * git clone https://github.com/jacobb/prowlpy.git
+    * cd prowlpy
+    * python setup build
+    * python setup install
 
 ### Installation
 
@@ -47,7 +53,7 @@ Handbrake - For converting and compressing
 
 5. Edit settings.cfg
     * You should only need to edit *save_path* unless you really want to play with the settings
-
+    * Add a ProwlApp.com API key if desired.
 
 ### Running
 1. Insert a DVD

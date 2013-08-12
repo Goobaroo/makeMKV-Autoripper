@@ -51,11 +51,20 @@ MKV_TEMP_OUTPUT = config.get('MAKEMKV', 'temp_output')
 USE_HANDBRAKE = config.getboolean('MAKEMKV', 'handbrake')
 MYTHTV = config.getboolean('SYSTEM','mythtv')
 EJECT_DEV = config.get('SYSTEM','dvd_drive')
+PROWL = config.getboolean('PROWL','prowl')
+PROWL_KEY = config.get('PROWL','key')
 
 #
 #   CODE
 #
 
+if PROWL:
+    try:
+        import prowlpy
+    except:
+        print 'Prowl Support requires prowlpy installed https://github.com/jacobb/prowlpy'
+
+    p = prowlpy.Prowl(PROWL_KEY)
 
 MKVapi = makeMKV()
 
@@ -64,6 +73,10 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
 
     if not os.path.exists('%s/%s' % (MKV_SAVE_PATH, movieTitle)):
         os.makedirs('%s/%s' % (MKV_SAVE_PATH, movieTitle))
+
+        if PROWL:
+            try:
+                p.add('makeMKV', 'Start Rip - '+movieTitle, movieTitle, 1, None, None)
 
         stopwatch = Timer()
 
@@ -78,6 +91,9 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
             print ("It took %s minutes to complete the ripping of %s"
                 %
                 (stopwatch.getTime(), movieTitle))
+            if PROWL:
+                try:
+                    p.add('makeMKV', 'Done Rip - '+movieTitle,"It took "+stopwatch.getTime()+"minutes to complete." , 1, None, None)
             if MYTHTV:
                 proc = subprocess.Popen(['mythutil', '--scanvideos'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
             os.system('eject '+EJECT_DEV)
