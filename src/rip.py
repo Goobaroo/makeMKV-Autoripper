@@ -49,10 +49,12 @@ MKV_MIN_LENGTH = config.getint('MAKEMKV', 'min_length')
 MKV_CACHE_SIZE = config.getint('MAKEMKV', 'cache_MB')
 MKV_TEMP_OUTPUT = config.get('MAKEMKV', 'temp_output')
 USE_HANDBRAKE = config.getboolean('MAKEMKV', 'handbrake')
+EJECT_DEV = config.get('SYSTEM','dvd_drive')
 
 #
 #   CODE
 #
+
 
 MKVapi = makeMKV()
 
@@ -75,6 +77,7 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
             print ("It took %s minutes to complete the ripping of %s"
                 %
                 (stopwatch.getTime(), movieTitle))
+            os.system('eject '+EJECT_DEV)
 
         else:
             stopwatch.stop()
@@ -82,6 +85,4 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
 
     else:
         print "Movie folder already exists, will not overwrite."
-
-else:
-    print "Could not find valid DVD in drive list"
+        os.system('eject '+EJECT_DEV)
