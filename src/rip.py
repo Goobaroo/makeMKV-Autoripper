@@ -70,7 +70,7 @@ if PROWL:
     except:
         print 'Prowl Support requires prowlpy installed https://github.com/jacobb/prowlpy'
 
-    p = prowlpy.Prowl(PROWL_KEY)
+    prowl = prowlpy.Prowl(PROWL_KEY)
 
 MKVapi = makeMKV()
 
@@ -82,7 +82,7 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
 
         if PROWL:
             try:
-                p.add('makeMKV', 'Start Rip - '+movieTitle, movieTitle, 1, None, None)
+                prowl.add('makeMKV', 'Start Rip - '+movieTitle, movieTitle, 1, None, None)
             except:
                 pass
 
@@ -102,7 +102,7 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
             print rip_summary
             if PROWL:
                 try:
-                    p.add('makeMKV', 'Done Rip - '+movieTitle, rip_summary, 1, None, None)
+                    prowl.add('makeMKV', 'Done Rip - '+movieTitle, rip_summary, 1, None, None)
                 except:
                     pass
             if MYTHTV:
@@ -112,11 +112,19 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
         else:
             stopwatch.stop()
             print "MakeMKV did not did not complete successfully"
-            p.add('makeMKV', 'Error', 'MakeMKV did not did not complete successfully.', 2, None, None)
+            if PROWL:
+                try:
+                    prowl.add('makeMKV', 'Error', 'MakeMKV did not did not complete successfully.', 2, None, None)
+                except:
+                    pass
 
     else:
         print "Movie folder already exists, will not overwrite."
-        p.add('makeMKV', 'Error', 'Movie folder already exists, will not overwrite.', 2, None, None)
+        if PROWL:
+            try:
+                prowl.add('makeMKV', 'Error', 'Movie folder already exists, will not overwrite.', 2, None, None)
+            except:
+                pass
         os.system('eject '+EJECT_DEV)
 try:
     # Cleanup the directory if it is empty.
