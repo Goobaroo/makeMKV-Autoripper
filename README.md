@@ -21,6 +21,9 @@ IMDbPy
     * At the time of writing, IMDbPy does not parse IMDb correctly because IMDb changed their HTML structure
     * sudo apt-get install python-imdbpy
 
+tendo
+* pip install tendo
+
 Handbrake - For converting and compressing
 * http://handbrake.fr/
     * sudo add-apt-repository ppa:stebbins/handbrake-releases

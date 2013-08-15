@@ -34,6 +34,12 @@ import os
 import ConfigParser
 from makemkv import makeMKV
 from timer import Timer
+try:
+    from tendo import singleton
+except:
+    print "Requires tendo: pip install tendo"
+
+me = singleton.SingleInstance() # will sys.exit(-1) if other instance is running
 
 #
 #   CONFIG VARIABLES
@@ -90,22 +96,30 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
 
             stopwatch.stop()
 
-            print ("It took %s minutes to complete the ripping of %s"
+            rip_summary=("It took %s minutes to complete the ripping of %s"
                 %
                 (stopwatch.getTime(), movieTitle))
+            print rip_summary
             if PROWL:
                 try:
-                    p.add('makeMKV', 'Done Rip - '+movieTitle,"It took "+stopwatch.getTime()+"minutes to complete." , 1, None, None)
+                    p.add('makeMKV', 'Done Rip - '+movieTitle, rip_summary, 1, None, None)
                 except:
                     pass
             if MYTHTV:
-                proc = subprocess.Popen(['mythutil', '--scanvideos'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+                os.system('mythutil --scanvideos')
             os.system('eject '+EJECT_DEV)
 
         else:
             stopwatch.stop()
             print "MakeMKV did not did not complete successfully"
+            p.add('makeMKV', 'Error', 'MakeMKV did not did not complete successfully.', 2, None, None)
 
     else:
         print "Movie folder already exists, will not overwrite."
+        p.add('makeMKV', 'Error', 'Movie folder already exists, will not overwrite.', 2, None, None)
         os.system('eject '+EJECT_DEV)
+try:
+    # Cleanup the directory if it is empty.
+    os.rmdir('%s/%s' % (MKV_SAVE_PATH, movieTitle))
+except:
+    pass
