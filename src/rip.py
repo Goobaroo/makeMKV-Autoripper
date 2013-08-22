@@ -31,6 +31,7 @@ Enough with these comments, on to the code
 #
 
 import os
+from os import rename, listdir
 import ConfigParser
 from makemkv import makeMKV
 from timer import Timer
@@ -105,6 +106,10 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
                     prowl.add('makeMKV', 'Done Rip - '+movieTitle, rip_summary, 1, None, None)
                 except:
                     pass
+            fnames = listdir(MKV_SAVE_PATH)
+            # Strip the _t00 from the first file, it makes for a nicer import in to mythtv.
+            if len(fnames) > 0:
+                rename (MKV_SAVE_PATH+'/'+fnames[0], MKV_SAVE_PATH+'/'+fnames[0].replace('_t00',''))
             if MYTHTV:
                 os.system('mythutil --scanvideos')
             os.system('eject '+EJECT_DEV)
