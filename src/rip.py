@@ -106,10 +106,10 @@ if (MKVapi.findDisc(MKV_TEMP_OUTPUT)):
                     prowl.add('makeMKV', 'Done Rip - '+movieTitle, rip_summary, 1, None, None)
                 except:
                     pass
-            fnames = listdir(MKV_SAVE_PATH)
+            fnames = listdir('%s/%s' % (MKV_SAVE_PATH, movieTitle))
             # Strip the _t00 from the first file, it makes for a nicer import in to mythtv.
             if len(fnames) > 0:
-                rename (MKV_SAVE_PATH+'/'+fnames[0], MKV_SAVE_PATH+'/'+fnames[0].replace('_t00',''))
+                rename ('%s/%s/%s' % (MKV_SAVE_PATH, movieTitle, fnames[0]), '%s/%s/%s' % (MKV_SAVE_PATH, movieTitle, fnames[0].replace('_t00','')))
             if MYTHTV:
                 os.system('mythutil --scanvideos')
             os.system('eject '+EJECT_DEV)
